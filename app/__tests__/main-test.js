@@ -1,8 +1,38 @@
 const {View,Text,TouchableHighlight} = React;
 import StoreFactory from '../storeFactory'
 import {Provider} from 'react-redux'
-
+import ActionTypes from '../actions/actionTypes'
 import WrappedMain, {Main} from '../main.js';
+
+describe('Wrapped Main View', ()=> {
+  var stateText,
+    main, store;
+
+  beforeEach(()=> {
+    stateText = 'Wrapper text';
+    store = StoreFactory.create();
+    sinon.stub(store, 'getState').returns({text: stateText});
+    sinon.spy(store, 'dispatch');
+    var mainWrapper = mount(<Provider store={store}><WrappedMain/></Provider>);
+    main = mainWrapper.find(Main);
+  });
+
+  afterEach(()=> {
+    store.getState.restore();
+    store.dispatch.restore();
+  });
+  it('It translates correct store state to properties', ()=> {
+    expect(main.prop('text')).to.eql(stateText);
+  });
+
+  it('It provides onClick property which dispatches change text action', ()=> {
+    main.prop('onClick')();
+    var dispatch = store.dispatch.lastCall.args[0];
+    expect(dispatch.type).to.equal(ActionTypes.CHANGE_TEXT);
+    expect(dispatch.text).to.equal('Hello Text');
+
+  });
+});
 
 describe('Main View', function () {
   describe('Layout', ()=> {
