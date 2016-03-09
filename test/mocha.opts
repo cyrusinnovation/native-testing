@@ -1,0 +1,9 @@
+--compilers js:./test/compiler
+
+--require ./test/setupFakeDOM
+--require ./test/testSetup
+--require ./test/ignoreImagesForBabel
+--reporter nyan
+--recursive
+
+**/app/**/__tests__/*-test.js
