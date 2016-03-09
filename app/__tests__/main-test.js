@@ -21,12 +21,20 @@ describe('Wrapped Main View', ()=> {
     store.getState.restore();
     store.dispatch.restore();
   });
+  
   it('It translates correct store state to properties', ()=> {
     expect(main.prop('text')).to.eql(stateText);
   });
 
-  it('It provides onClick property which dispatches change text action', ()=> {
-    main.prop('onClick')();
+  it('It provides changeText property which dispatches change text action', ()=> {
+    var changeTextFunc = main.prop('changeText');
+
+    changeTextFunc('Greetings');
+    var dispatch = store.dispatch.lastCall.args[0];
+    expect(dispatch.type).to.equal(ActionTypes.CHANGE_TEXT);
+    expect(dispatch.text).to.equal('Greetings');
+
+    changeTextFunc('Hello Text');
     var dispatch = store.dispatch.lastCall.args[0];
     expect(dispatch.type).to.equal(ActionTypes.CHANGE_TEXT);
     expect(dispatch.text).to.equal('Hello Text');
@@ -41,7 +49,7 @@ describe('Main View', function () {
 
     before(()=> {
       textValue = 'here is the text';
-      main = mount(<Main text={textValue}/>);
+      main = mount(<Main text={textValue} changeText={()=>{}}/>);
     });
 
     it('Has a view with some text', ()=> {
@@ -59,13 +67,26 @@ describe('Main View', function () {
   });
 
   describe('Interaction', () => {
-    it('Fires on click property on button press', ()=> {
-      var onClick = sinon.spy();
-      var main = mount(<Main onClick={onClick}/>);
+    it('Fires on click property on button press sends Hello React to changeText method', ()=> {
+      var changeTextSpy = sinon.spy();
+      var text = '';
+      var main = mount(<Main text={text} changeText={changeTextSpy}/>);
       var button = main.find(TouchableHighlight);
 
       button.prop('onPress')();
-      expect(onClick.called).to.equal(true);
+      expect(changeTextSpy.called).to.equal(true);
+      expect(changeTextSpy.lastCall.args).to.eql(['Hello React']);
+    });
+
+    it('Fires on click property on button press sends Goodbye React to changeText method if text prop is Hello React', ()=> {
+      var changeTextSpy = sinon.spy();
+      var text = 'Hello React';
+      var main = mount(<Main text={text} changeText={changeTextSpy}/>);
+      var button = main.find(TouchableHighlight);
+
+      button.prop('onPress')();
+      expect(changeTextSpy.called).to.equal(true);
+      expect(changeTextSpy.lastCall.args).to.eql(['Goodbye React']);
     });
   });
 });

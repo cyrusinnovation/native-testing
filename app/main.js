@@ -3,48 +3,67 @@
  * https://github.com/facebook/react-native
  */
 'use strict';
-import { connect } from 'react-redux'
-import {changeText} from './actions/actions'
+import {bindActionCreators} from 'redux';
+import { connect} from 'react-redux';
+import {changeText} from './actions/actions';
 import React,
   {
   Component,
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
-  } from 'react-native'
+  StyleSheet,
+  PropTypes
+  } from 'react-native';
 
 export class Main extends Component {
+  constructor(props) {
+    super(props);
+    this._updateText = this.__updateText.bind(this);
+  }
+
+  __updateText() {
+    if (this.props.text === 'Hello React') {
+      this.props.changeText('Goodbye React');
+    }
+    else {
+      this.props.changeText('Hello React');
+    }
+  }
+
 
   render() {
     return (
       <View style={styles.container}>
         <Text>{this.props.text}</Text>
-        <TouchableHighlight onPress={this.props.onClick}><Text>Push Me</Text></TouchableHighlight>
+        <TouchableHighlight onPress={this._updateText}><Text>Push Me</Text></TouchableHighlight>
       </View>
     );
   }
 }
+Main.propTypes = {
+  text: PropTypes.string.isRequired,
+  changeText: PropTypes.func.isRequired
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 10
   },
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
-  },
+    marginBottom: 5
+  }
 });
-
 
 
 const mapStateToProps = (state) => {
@@ -54,11 +73,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    onClick: () => {
-      dispatch(changeText('Hello Text'));
-    }
-  }
+  return bindActionCreators({changeText}, dispatch);
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
