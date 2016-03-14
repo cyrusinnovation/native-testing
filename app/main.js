@@ -5,7 +5,7 @@
 'use strict';
 import {bindActionCreators} from 'redux';
 import { connect} from 'react-redux';
-import {changeText} from './actions/actions';
+import {changeText, getAPIText} from './actions/actions';
 import React,
   {
   Component,
@@ -31,12 +31,12 @@ export class Main extends Component {
     }
   }
 
-
   render() {
     return (
       <View style={styles.container}>
         <Text>{this.props.text}</Text>
         <TouchableHighlight onPress={this._updateText}><Text>Push Me</Text></TouchableHighlight>
+        <TouchableHighlight onPress={this.props.getAPIText}><Text>Get Text from server</Text></TouchableHighlight>
       </View>
     );
   }
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({changeText}, dispatch);
+  return bindActionCreators({changeText, getAPIText}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

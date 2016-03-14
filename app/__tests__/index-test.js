@@ -11,7 +11,7 @@ describe('Index', ()=> {
 
   var mockStore;
   beforeEach(()=> {
-    mockStore = new MockStore();
+    mockStore = new MockStore({text:'text'});
     sinon.stub(StoreFactory, 'create').returns(mockStore)
   });
 
