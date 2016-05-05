@@ -4,6 +4,22 @@ Example of a Unit Tested React Native Application
 When working with ReactNative, I have had much difficulty getting any semblance of testing up and running.
 There were several layers that need to be made clear. Those being Mocha itself, ES6(7?), and React-Native itself.
 
+Install Steps
+--------------------------------------------------
+1. install nvm
+1. git clone this repo and cd into it
+1. nvm use
+1. install [react native](https://facebook.github.io/react-native/docs/getting-started.html)
+1. `npm install`
+1. `npm install -g mocha`
+
+Running
+--------------------------------------------------
+1. `npm start`
+1. `react-native run-ios`
+
+To run the tests, type: `mocha`
+
 Mocha
 --------------------------------------------------
 The very basics of a mocha setup reads from mocha.opts in the ./test folder of your project root. In it, we define the options for your mocha run.
